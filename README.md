@@ -10,7 +10,7 @@ node server.js
 
 Open http://localhost:8000 with DevTools open.
 
-`style.css` and `script.js` are each served with a `SourceMap` header (`/from-header.*.map`) and each ends with a `sourceMappingURL` comment (`from-comment.*.map`). All four maps are valid, and each names its original file after the link that led to it: `linked-by-header.*` or `linked-by-comment.*`. So whichever file DevTools shows is the link it followed.
+`style.css` and `script.js` are each served with a `SourceMap` header (`/from-header.*.map`) and each ends with a `sourceMappingURL` comment (`from-comment.*.map`). All four maps are valid. Each names its original file after the link that led to it (`linked-by-header.*` or `linked-by-comment.*`), and that file starts with a comment saying so. So whichever file DevTools shows or opens is the link it followed.
 
 ## Expected
 
@@ -25,8 +25,8 @@ Both files use the header's map.
 
 Where to see it in DevTools:
 
-- **Console:** the `generated` message links to `linked-by-header.js:1`.
-- **Elements → Styles:** the `p { color: red; }` rule links to `linked-by-comment.css:1`.
+- **Console:** the `generated` message links to `linked-by-header.js`; clicking it opens a file that starts with `// Linked by the SourceMap header`.
+- **Elements → Styles:** the `p { color: red; }` rule links to `linked-by-comment.css`; clicking it opens a file that starts with `/* Linked by the sourceMappingURL comment */`.
 - **Sources:** under Authored, the tree lists `linked-by-header.js` and `linked-by-comment.css`.
 
 Through CDP: `Debugger.scriptParsed` → `sourceMapURL` is `/from-header.js.map`, and `CSS.styleSheetAdded` → `header.sourceMapURL` is `from-comment.css.map`. Server logs aren't a reliable signal: DevTools may fetch every linked map, including the one it doesn't use.

@@ -1,6 +1,6 @@
 // node server.js, then open http://localhost:8000 with DevTools open.
-// Every map is valid and names its original file after where it was linked from,
-// so DevTools shows which link it followed.
+// Every map is valid, and its original file is named and starts with a comment saying
+// which link led to it, so DevTools shows which link it followed.
 const http = require('http');
 
 const PORT = Number(process.env.PORT ?? 8000);
@@ -13,10 +13,10 @@ const files = {
     '/': ['text/html', '<link rel="stylesheet" href="/style.css"><script src="/script.js"></script><p>Check DevTools</p>'],
     '/style.css': ['text/css', 'p { color: red; }\n/*# sourceMappingURL=from-comment.css.map */\n', '/from-header.css.map'],
     '/script.js': ['text/javascript', 'console.log("generated");\n//# sourceMappingURL=from-comment.js.map\n', '/from-header.js.map'],
-    '/from-header.css.map': map('linked-by-header.css', 'p { color: red; }'),
-    '/from-comment.css.map': map('linked-by-comment.css', 'p { color: red; }'),
-    '/from-header.js.map': map('linked-by-header.js', 'console.log("generated");'),
-    '/from-comment.js.map': map('linked-by-comment.js', 'console.log("generated");'),
+    '/from-header.css.map': map('linked-by-header.css', '/* Linked by the SourceMap header */\np { color: red; }'),
+    '/from-comment.css.map': map('linked-by-comment.css', '/* Linked by the sourceMappingURL comment */\np { color: red; }'),
+    '/from-header.js.map': map('linked-by-header.js', '// Linked by the SourceMap header\nconsole.log("generated");'),
+    '/from-comment.js.map': map('linked-by-comment.js', '// Linked by the sourceMappingURL comment\nconsole.log("generated");'),
 };
 
 http.createServer((req, res) => {
